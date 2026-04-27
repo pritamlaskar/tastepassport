@@ -35,12 +35,6 @@ TastePassport uses Reddit's official Data API via [PRAW](https://praw.readthedoc
 
 Source code for the Reddit crawler: [`backend/pipeline/crawlers/reddit.py`](backend/pipeline/crawlers/reddit.py)
 
-## Prerequisites
-
-- Docker + Docker Compose
-- An Anthropic API key
-- A Reddit API app (free — [create one here](https://www.reddit.com/prefs/apps), select "script")
-
 ## Setup
 
 ```bash
