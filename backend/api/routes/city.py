@@ -155,12 +155,38 @@ def _trigger_pipeline(city: City, db: Session):
 
 
 def _format_restaurant(r: Restaurant, db: Session) -> dict:
-    from models.source import RawSource
+    from models.source import RawSource, SourceType, Mention
+
     sources_used = []
     if r.reddit_mention_count > 0:
         sources_used.append("reddit")
     if r.blog_mention_count > 0:
         sources_used.append("blog")
+
+    # Surface the highest-upvote Reddit thread so every result links back to Reddit
+    top_reddit_url = None
+    top_reddit_upvotes = None
+    top_reddit_subreddit = None
+    if r.reddit_mention_count > 0:
+        mention = (
+            db.query(Mention)
+            .filter(Mention.restaurant_id == r.id)
+            .first()
+        )
+        if mention:
+            source = (
+                db.query(RawSource)
+                .filter(
+                    RawSource.id == mention.source_id,
+                    RawSource.source_type == SourceType.reddit,
+                )
+                .order_by(RawSource.upvotes.desc())
+                .first()
+            )
+            if source:
+                top_reddit_url = source.source_url
+                top_reddit_upvotes = source.upvotes
+                top_reddit_subreddit = source.subreddit
 
     return {
         "id": r.id,
@@ -172,7 +198,14 @@ def _format_restaurant(r: Restaurant, db: Session) -> dict:
         "local_score": r.local_score,
         "why_it_ranks": r.why_it_ranks,
         "mention_count": r.mention_count,
+        "reddit_mention_count": r.reddit_mention_count,
+        "blog_mention_count": r.blog_mention_count,
         "sources": sources_used,
+        "top_reddit_source": {
+            "url": top_reddit_url,
+            "upvotes": top_reddit_upvotes,
+            "subreddit": top_reddit_subreddit,
+        } if top_reddit_url else None,
         "last_mentioned_at": r.last_mentioned_at.isoformat() if r.last_mentioned_at else None,
         "score_breakdown": r.score_breakdown or {},
     }
