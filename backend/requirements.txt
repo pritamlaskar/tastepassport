@@ -1,0 +1,43 @@
+# Web framework
+fastapi==0.111.0
+uvicorn[standard]==0.29.0
+
+# Database
+sqlalchemy==2.0.30
+alembic==1.13.1
+psycopg2-binary==2.9.9
+
+# Task queue
+celery==5.4.0
+redis==5.0.4
+flower==2.0.1
+
+# HTTP clients
+httpx==0.27.0
+requests==2.31.0
+
+# Crawling
+scrapy==2.11.1
+playwright==1.44.0
+
+# NLP / AI
+anthropic==0.27.0
+
+# Reddit API
+praw==7.7.1
+
+# Text processing
+fuzzywuzzy==0.18.0
+python-levenshtein==0.25.1
+beautifulsoup4==4.12.3
+lxml==5.2.1
+
+# Utilities
+python-dotenv==1.0.1
+pydantic==2.7.1
+pydantic-settings==2.2.1
+python-multipart==0.0.9
+ujson==5.10.0
+
+# Validation
+email-validator==2.1.1
